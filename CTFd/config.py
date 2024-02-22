@@ -79,6 +79,7 @@ config_ini.optionxform = str  # Makes the key value case-insensitive
 path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
 config_ini.read(path)
 
+print(f"Running as user {os.getuid()}")
 
 # fmt: off
 class ServerConfig(object):
@@ -125,12 +126,24 @@ class ServerConfig(object):
     if CACHE_REDIS_URL:
         CACHE_TYPE: str = "redis"
     else:
-        CACHE_TYPE: str = "filesystem"
-        CACHE_DIR: str = os.path.join(
-            os.path.dirname(__file__), os.pardir, ".data", "filesystem_cache"
-        )
-        # Override the threshold of cached values on the filesystem. The default is 500. Don't change unless you know what you're doing.
-        CACHE_THRESHOLD: int = 0
+        if False:
+            # NOTE using the NullCache (CACHE_TYPE = "null") does not work. May be it is a bug in CTFd.
+            CACHE_TYPE: str = "null"
+
+        if False:
+            CACHE_TYPE: str = "filesystem"
+            #CACHE_DIR: str = os.path.join(
+            #    os.path.dirname(__file__), os.pardir, ".data", "filesystem_cache"
+            #)
+            CACHE_DIR = "/var/cache/CTFd"
+            # NOTE: CTFd uses threshold of 0 (aka no threshold). We instead put 100 (a single item will be catched at time)
+            # that seems reasonable.
+            CACHE_THRESHOLD: int = 1
+
+        if True:
+            # memory only
+            CACHE_TYPE = "simple"
+            CACHE_THRESHOLD: int = 1
 
     # === SECURITY ===
     SESSION_COOKIE_HTTPONLY: bool = config_ini["security"].getboolean("SESSION_COOKIE_HTTPONLY", fallback=True)

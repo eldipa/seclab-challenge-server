@@ -5,6 +5,7 @@ from flask import request
 from flask_caching import Cache, make_template_fragment_key
 
 cache = Cache()
+print(repr(cache), cache)
 
 
 def timed_lru_cache(timeout: int = 300, maxsize: int = 64, typed: bool = False):
