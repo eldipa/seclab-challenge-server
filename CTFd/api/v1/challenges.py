@@ -1,6 +1,7 @@
 from typing import List  # noqa: I001
 
-from flask import abort, render_template, request, url_for
+from CTFd.utils import abort
+from flask import render_template, request, url_for
 from flask_restx import Namespace, Resource
 from sqlalchemy.sql import and_
 

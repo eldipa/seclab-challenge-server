@@ -4,6 +4,7 @@ from enum import Enum
 import cmarkgfm
 from cmarkgfm.cmark import Options
 from flask import current_app as app
+from flask import abort as _flask_abort
 
 # isort:imports-firstparty
 from CTFd.cache import cache
@@ -99,3 +100,10 @@ def import_in_progress():
         return True
     else:
         return False
+
+def abort(*args, **kargs):
+    import traceback
+    if kargs.pop('print_stack', True):
+        traceback.print_stack()
+
+    _flask_abort(*args, **kargs)

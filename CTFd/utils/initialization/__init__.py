@@ -3,7 +3,8 @@ import logging
 import os
 import sys
 
-from flask import abort, redirect, render_template, request, session, url_for
+from CTFd.utils import abort
+from flask import redirect, render_template, request, session, url_for
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 

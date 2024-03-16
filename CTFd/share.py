@@ -1,4 +1,5 @@
-from flask import Blueprint, abort, request
+from flask import Blueprint, request
+from CTFd.utils import abort
 
 from CTFd.utils import get_config
 from CTFd.utils.social import get_social_share

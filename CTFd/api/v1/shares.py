@@ -1,4 +1,5 @@
-from flask import abort, request
+from flask import request
+from CTFd.utils import abort
 from flask_restx import Namespace, Resource
 
 from CTFd.utils import get_config

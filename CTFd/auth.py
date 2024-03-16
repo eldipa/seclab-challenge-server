@@ -1,7 +1,8 @@
 import base64  # noqa: I001
 
 import requests
-from flask import Blueprint, abort
+from flask import Blueprint
+from CTFd.utils import abort
 from flask import current_app as app
 from flask import redirect, render_template, request, session, url_for
 from itsdangerous.exc import BadSignature, BadTimeSignature, SignatureExpired

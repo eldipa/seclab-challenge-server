@@ -1,7 +1,8 @@
 import copy
 from typing import List
 
-from flask import abort, request, session
+from CTFd.utils import abort
+from flask import request, session
 from flask_restx import Namespace, Resource
 
 from CTFd.api.v1.helpers.request import validate_args

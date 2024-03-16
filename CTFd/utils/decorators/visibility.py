@@ -1,6 +1,7 @@
 import functools
 
-from flask import abort, redirect, render_template, request, url_for
+from CTFd.utils import abort
+from flask import redirect, render_template, request, url_for
 
 from CTFd.constants.config import (
     AccountVisibilityTypes,

@@ -3,7 +3,8 @@ import datetime
 import os
 from io import StringIO
 
-from flask import Blueprint, abort
+from CTFd.utils import abort
+from flask import Blueprint
 from flask import current_app as app
 from flask import (
     jsonify,

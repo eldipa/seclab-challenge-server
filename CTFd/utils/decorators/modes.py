@@ -1,6 +1,6 @@
 import functools
 
-from flask import abort
+from CTFd.utils import abort
 
 from CTFd.utils import get_config
 from CTFd.utils.modes import TEAMS_MODE, USERS_MODE

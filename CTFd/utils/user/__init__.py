@@ -1,7 +1,7 @@
 import datetime  # noqa: I001
 import re
 
-from flask import abort
+from CTFd.utils import abort
 from flask import current_app as app
 from flask import redirect, request, session, url_for
 

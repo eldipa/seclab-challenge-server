@@ -1,4 +1,5 @@
-from flask import abort, render_template, request, url_for
+from flask import render_template, request, url_for
+from CTFd.utils import abort
 
 from CTFd.admin import admin
 from CTFd.models import Challenges, Flags, Solves
