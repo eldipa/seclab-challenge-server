@@ -143,7 +143,7 @@ class ServerConfig(object):
         if True:
             # memory only
             CACHE_TYPE = "simple"
-            CACHE_THRESHOLD: int = 1
+            CACHE_THRESHOLD: int = 100
 
     # === SECURITY ===
     SESSION_COOKIE_HTTPONLY: bool = config_ini["security"].getboolean("SESSION_COOKIE_HTTPONLY", fallback=True)
