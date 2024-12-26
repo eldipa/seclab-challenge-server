@@ -287,29 +287,34 @@ function loadChals() {
     }
 
     $challenges_board.empty();
-
     for (let i = challenges.length - 1; i >= 0; i--) {
       if ($.inArray(challenges[i].category, categories) == -1) {
         const category = challenges[i].category;
         categories.push(category);
-
-        const categoryid = category.replace(/ /g, "-").hashCode();
-        const categoryrow = $(
-          "" +
-            '<div id="{0}-row" class="pt-5">'.format(categoryid) +
-            '<div class="category-header col-md-12 mb-3">' +
-            "</div>" +
-            '<div class="category-challenges col-md-12">' +
-            '<div class="challenges-row col-md-12"></div>' +
-            "</div>" +
-            "</div>"
-        );
-        categoryrow
-          .find(".category-header")
-          .append($("<h3>" + category + "</h3>"));
-
-        $challenges_board.append(categoryrow);
       }
+    }
+
+    categories.sort();
+
+    for (let i = categories.length - 1; i >= 0; i--) {
+      const category = categories[i].category;
+
+      const categoryid = category.replace(/ /g, "-").hashCode();
+      const categoryrow = $(
+        "" +
+          '<div id="{0}-row" class="pt-5">'.format(categoryid) +
+          '<div class="category-header col-md-12 mb-3">' +
+          "</div>" +
+          '<div class="category-challenges col-md-12">' +
+          '<div class="challenges-row col-md-12"></div>' +
+          "</div>" +
+          "</div>"
+      );
+      categoryrow
+        .find(".category-header")
+        .append($("<h3>" + category + "</h3>"));
+
+      $challenges_board.append(categoryrow);
     }
 
     for (let i = 0; i <= challenges.length - 1; i++) {
