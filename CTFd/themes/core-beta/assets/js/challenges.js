@@ -222,6 +222,9 @@ Alpine.data("ChallengeBoard", () => ({
       console.log(error);
     }
 
+    // xxx Sort, unconditionally
+    categories.sort();
+
     return categories;
   },
 
@@ -243,6 +246,8 @@ Alpine.data("ChallengeBoard", () => ({
       console.log("Error running challenge_order function");
       console.log(error);
     }
+
+    // TODO sort challenges by id (?)
 
     return challenges;
   },

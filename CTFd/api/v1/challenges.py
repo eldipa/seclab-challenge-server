@@ -306,7 +306,10 @@ class Challenge(Resource):
 
         if chal.requirements:
             requirements = chal.requirements.get("prerequisites", [])
-            anonymize = chal.requirements.get("anonymize")
+
+            # anonymize = chal.requirements.get("anonymize")
+            anonymize = True
+
             # Gather all challenge IDs so that we can determine invalid challenge prereqs
             all_challenge_ids = {
                 c.id for c in Challenges.query.with_entities(Challenges.id).all()
@@ -335,10 +338,10 @@ class Challenge(Resource):
                                 "id": chal.id,
                                 "type": "hidden",
                                 "name": "???",
-                                "value": 0,
+                                "value": chal.value or 0, # leak the value, on purpose
                                 "solves": None,
                                 "solved_by_me": False,
-                                "category": "???",
+                                "category": chal.category, # leak the category, on purpose
                                 "tags": [],
                                 "template": "",
                                 "script": "",
