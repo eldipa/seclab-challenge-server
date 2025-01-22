@@ -174,7 +174,8 @@ class ChallengeList(Resource):
         for challenge in chal_q:
             if challenge.requirements:
                 requirements = challenge.requirements.get("prerequisites", [])
-                anonymize = challenge.requirements.get("anonymize")
+                #anonymize = challenge.requirements.get("anonymize")
+                anonymize = True
                 prereqs = set(requirements).intersection(all_challenge_ids)
                 if user_solves >= prereqs or admin_view:
                     pass
@@ -185,10 +186,10 @@ class ChallengeList(Resource):
                                 "id": challenge.id,
                                 "type": "hidden",
                                 "name": "???",
-                                "value": 0,
+                                "value": challenge.value or 0, # leak the value, on purpose
                                 "solves": None,
                                 "solved_by_me": False,
-                                "category": "???",
+                                "category": challenge.category, # leak the category, on purpose
                                 "tags": [],
                                 "template": "",
                                 "script": "",
