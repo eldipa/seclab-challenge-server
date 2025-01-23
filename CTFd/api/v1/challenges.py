@@ -185,7 +185,7 @@ class ChallengeList(Resource):
                             {
                                 "id": challenge.id,
                                 "type": "hidden",
-                                "name": "???",
+                                "name": "<unlocked>",
                                 "value": challenge.value or 0, # leak the value, on purpose
                                 "solves": None,
                                 "solved_by_me": False,
