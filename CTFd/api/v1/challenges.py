@@ -309,7 +309,7 @@ class Challenge(Resource):
             requirements = chal.requirements.get("prerequisites", [])
 
             # anonymize = chal.requirements.get("anonymize")
-            anonymize = True
+            anonymize = False
 
             # Gather all challenge IDs so that we can determine invalid challenge prereqs
             all_challenge_ids = {
