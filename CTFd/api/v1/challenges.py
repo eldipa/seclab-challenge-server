@@ -339,10 +339,10 @@ class Challenge(Resource):
                                 "id": chal.id,
                                 "type": "hidden",
                                 "name": "???",
-                                "value": chal.value or 0, # leak the value, on purpose
+                                "value": 0,
                                 "solves": None,
                                 "solved_by_me": False,
-                                "category": chal.category, # leak the category, on purpose
+                                "category": "???",
                                 "tags": [],
                                 "template": "",
                                 "script": "",
