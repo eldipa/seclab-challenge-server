@@ -11,6 +11,8 @@ from CTFd.utils import get_config
 from CTFd.utils.dates import isoformat, unix_time_to_utc
 from CTFd.utils.helpers.models import build_model_filters
 from CTFd.utils.modes import generate_account_url, get_model
+from CTFd.utils.security.signing import hmac
+import hashlib
 
 Challenge = namedtuple(
     "Challenge", ["id", "type", "name", "value", "category", "tags", "requirements"]
@@ -128,3 +130,59 @@ def get_solve_counts_for_challenges(challenge_id=None, admin=False):
     for chal_id, solve_count in solves_q:
         solve_counts[chal_id] = solve_count
     return solve_counts
+
+
+def compute_challenge_passcode(team, challenge):
+    if team is None or challenge is None:
+        return '000000', 'ask-to-the-staff'
+
+    challenge_name = str(challenge.name)
+    team_created_at = str(team.created)
+    team_id = str(team.id)
+
+    passcode_hex = hmac(':'.join((challenge_name, team_created_at, team_id)))[:6]
+    passcodechk = hashlib.md5(b":".join(s.encode("utf-8") for s in (challenge_name, passcode_hex))).hexdigest()[:6]
+
+    public_passcode_hex = passcode_hex + passcodechk
+    return passcode_hex, public_passcode_hex
+
+
+def mangle(target_substr, seed):
+    symbols = {
+        "a" : "4",
+        "e" : "3",
+        "l" : "1",
+        "o" : "0",
+        "t" : "7",
+        "s" : "5",
+    }
+
+    revsymbols = {ord(v): ord(k) for k, v in symbols.items()}
+
+    tmp = target_substr.translate(revsymbols)
+    lower = tmp.lower()
+    upper = tmp.upper()
+
+
+    if isinstance(seed, str):
+        seed = seed.encode("utf-8")
+
+    seedhash = hashlib.md5(seed).hexdigest()
+
+    mangled = ''
+    for i in range(len(target_substr)):
+        c = lower[i]
+        j = i % len(seedhash)
+        s = int(seedhash[j], 16)
+
+        if c.islower():
+            options = [c, upper[i]]
+            if c in symbols:
+                options.append(symbols[c])
+
+            choice = s % len(options)
+            mangled += options[choice]
+        else:
+            mangled += c
+
+    return mangled

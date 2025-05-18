@@ -1,6 +1,8 @@
 import re
 
 from CTFd.plugins import register_plugin_assets_directory
+from CTFd.utils.challenges import (mangle, compute_challenge_passcode)
+from CTFd.utils.user import get_current_team
 
 
 class FlagException(Exception):
@@ -40,6 +42,26 @@ class CTFdStaticFlag(BaseFlag):
             for x, y in zip(saved.lower(), provided.lower()):
                 result |= ord(x) ^ ord(y)
         else:
+            if data.startswith('mangle -> '):
+                team = get_current_team()
+                challenge = chal_key_obj.challenge
+
+                # eg:
+                #   saved (orig) = ctf{Some Foo Flag}
+                #   data =  mangle -> Foo
+                # Then,
+                #   substr_to_mangle = Foo
+                #   substr_mangled = f0o
+                # Results in,
+                #   saved (mangled) = ctf{Some f0o Flag}
+                #
+                # to pass the chk, 'provided' must be equal to mangled (save)
+                _, substr_to_mangle = data.split(' -> ', 1)
+                if substr_to_mangle in saved:
+                    seed, _ = compute_challenge_passcode(team, challenge)
+                    substr_mangled = mangle(substr_to_mangle, seed)
+                    saved = saved.replace(substr_to_mangle, substr_mangled)
+
             for x, y in zip(saved, provided):
                 result |= ord(x) ^ ord(y)
         return result == 0

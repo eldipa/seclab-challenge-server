@@ -22,6 +22,7 @@ from CTFd.schemas.tags import TagSchema
 from CTFd.utils import config, get_config
 from CTFd.utils import user as current_user
 from CTFd.utils.challenges import (
+    compute_challenge_passcode,
     get_all_challenges,
     get_solve_counts_for_challenges,
     get_solve_ids_for_user_id,
@@ -432,6 +433,10 @@ class Challenge(Resource):
         response["tags"] = tags
         response["hints"] = hints
 
+        # Get team
+        team = get_current_team()
+        _, public_passcode_hex = compute_challenge_passcode(team, chal)
+
         response["view"] = render_template(
             chal_class.templates["view"].lstrip("/"),
             solves=solve_count,
@@ -442,6 +447,7 @@ class Challenge(Resource):
             max_attempts=chal.max_attempts,
             attempts=attempts,
             challenge=chal,
+            public_passcode_hex=public_passcode_hex,
         )
 
         db.session.close()
