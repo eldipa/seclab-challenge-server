@@ -42,7 +42,7 @@ class CTFdStaticFlag(BaseFlag):
             for x, y in zip(saved.lower(), provided.lower()):
                 result |= ord(x) ^ ord(y)
         else:
-            if data.startswith('mangle -> '):
+            if data and data.startswith('mangle -> '):
                 team = get_current_team()
                 challenge = chal_key_obj.challenge
 
