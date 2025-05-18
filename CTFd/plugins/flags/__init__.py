@@ -42,7 +42,7 @@ class CTFdStaticFlag(BaseFlag):
             for x, y in zip(saved.lower(), provided.lower()):
                 result |= ord(x) ^ ord(y)
         else:
-            if data and data.startswith('mangle -> '):
+            if data.startswith('mangle -> '):
                 team = get_current_team()
                 challenge = chal_key_obj.challenge
 
@@ -59,8 +59,9 @@ class CTFdStaticFlag(BaseFlag):
                 _, substr_to_mangle = data.split(' -> ', 1)
                 if substr_to_mangle in saved:
                     seed, _ = compute_challenge_passcode(team, challenge)
-                    substr_mangled = mangle(substr_to_mangle, seed)
-                    saved = saved.replace(substr_to_mangle, substr_mangled)
+                    if seed:
+                        substr_mangled = mangle(substr_to_mangle, seed)
+                        saved = saved.replace(substr_to_mangle, substr_mangled)
 
             for x, y in zip(saved, provided):
                 result |= ord(x) ^ ord(y)

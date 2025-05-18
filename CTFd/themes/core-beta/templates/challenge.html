@@ -46,7 +46,6 @@
             {% endif %}
 
             <span class="challenge-desc">{% block description %}{{ challenge.html }}{% endblock %}</span>
-            <div class="challenge-desc"><strong>Passcode: </strong>{{ public_passcode_hex }}</div>
 
             {% if challenge.connection_info %}
               <div class="mb-2">

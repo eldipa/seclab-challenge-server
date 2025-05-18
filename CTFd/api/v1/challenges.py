@@ -363,6 +363,10 @@ class Challenge(Resource):
             user = get_current_user()
             team = get_current_team()
 
+            _, public_passcode_hex = compute_challenge_passcode(team, chal)
+            if public_passcode_hex:
+                tags.append("passcode:" + public_passcode_hex)
+
             # TODO: Convert this into a re-useable decorator
             if is_admin():
                 pass
@@ -433,10 +437,6 @@ class Challenge(Resource):
         response["tags"] = tags
         response["hints"] = hints
 
-        # Get team
-        team = get_current_team()
-        _, public_passcode_hex = compute_challenge_passcode(team, chal)
-
         response["view"] = render_template(
             chal_class.templates["view"].lstrip("/"),
             solves=solve_count,
@@ -447,7 +447,6 @@ class Challenge(Resource):
             max_attempts=chal.max_attempts,
             attempts=attempts,
             challenge=chal,
-            public_passcode_hex=public_passcode_hex,
         )
 
         db.session.close()

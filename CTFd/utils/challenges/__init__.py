@@ -136,12 +136,27 @@ def compute_challenge_passcode(team, challenge):
     if team is None or challenge is None:
         return '000000', 'ask-to-the-staff'
 
-    challenge_name = str(challenge.name)
+    # Given
+    #   tag -> scenario:foo-bar
+    # Then
+    #   scenario_name -> foo-bar
+    scenario_name = None
+    for t in challenge.tags:
+        if t and t.value and t.value.startswith('scenario:'):
+            _, scenario_name = t.value.split(":", 1)
+            scenario_name = scenario_name.strip()
+            break
+
+    # not an error, the challenge just doesn't require a passcode
+    if scenario_name is None:
+        return None, None
+
+    scenario_name = str(scenario_name)
     team_created_at = str(team.created)
     team_id = str(team.id)
 
-    passcode_hex = hmac(':'.join((challenge_name, team_created_at, team_id)))[:6]
-    passcodechk = hashlib.md5(b":".join(s.encode("utf-8") for s in (challenge_name, passcode_hex))).hexdigest()[:6]
+    passcode_hex = hmac(':'.join((scenario_name, team_created_at, team_id)))[:6]
+    passcodechk = hashlib.md5(b":".join(s.encode("utf-8") for s in (scenario_name, passcode_hex))).hexdigest()[:6]
 
     public_passcode_hex = passcode_hex + passcodechk
     return passcode_hex, public_passcode_hex
