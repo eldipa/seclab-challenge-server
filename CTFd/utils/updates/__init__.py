@@ -22,7 +22,7 @@ def update_check(force=False):
     :return:
     """
     # If UPDATE_CHECK is disabled don't check for updates at all.
-    if app.config.get("UPDATE_CHECK") is False:
+    if app.config.get("UPDATE_CHECK") == False:
         return
 
     # Don't do an update check if not setup

@@ -17,7 +17,7 @@ def subscribe():
             yield str(event)
 
     enabled = get_app_config("SERVER_SENT_EVENTS")
-    if enabled is False:
+    if enabled == False:
         return ("", 204)
 
     # Close the db session to avoid OperationalError with MySQL connection errors
