@@ -20,11 +20,13 @@
               data-bs-target="#profile" role="tab"
           >{% trans %}Profile{% endtrans %}
           </button>
+          {% if is_admin() %}
           <button
               class="nav-link" id="settings-tokens-tab" data-bs-toggle="pill" data-bs-target="#tokens"
               role="tab"
           >{% trans %}Access Tokens{% endtrans %}
           </button>
+          {% endif %}
         </div>
       </div>
 
@@ -118,6 +120,7 @@
             {% endwith %}
           </div>
 
+          {% if is_admin() %}
           <div class="tab-pane fade" id="tokens" role="tabpanel">
 
             {% with form = Forms.self.TokensForm() %}
@@ -255,6 +258,7 @@
             {% endif %}
 
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ from CTFd.schemas.tokens import TokenSchema
 from CTFd.utils.decorators import authed_only, require_verified_emails
 from CTFd.utils.security.auth import generate_user_token
 from CTFd.utils.user import get_current_user, get_current_user_type, is_admin
+from CTFd.utils.decorators import admins_only
 
 tokens_namespace = Namespace("tokens", description="Endpoint to retrieve Tokens")
 
@@ -46,8 +47,7 @@ tokens_namespace.schema_model(
 
 @tokens_namespace.route("")
 class TokenList(Resource):
-    @require_verified_emails
-    @authed_only
+    @admins_only
     @tokens_namespace.doc(
         description="Endpoint to get token objects in bulk",
         responses={
@@ -70,8 +70,7 @@ class TokenList(Resource):
 
         return {"success": True, "data": response.data}
 
-    @require_verified_emails
-    @authed_only
+    @admins_only
     @tokens_namespace.doc(
         description="Endpoint to create a token object",
         responses={
@@ -107,8 +106,7 @@ class TokenList(Resource):
 @tokens_namespace.route("/<token_id>")
 @tokens_namespace.param("token_id", "A Token ID")
 class TokenDetail(Resource):
-    @require_verified_emails
-    @authed_only
+    @admins_only
     @tokens_namespace.doc(
         description="Endpoint to get an existing token object",
         responses={
@@ -136,8 +134,7 @@ class TokenDetail(Resource):
 
         return {"success": True, "data": response.data}
 
-    @require_verified_emails
-    @authed_only
+    @admins_only
     @tokens_namespace.doc(
         description="Endpoint to delete an existing token object",
         responses={200: ("Success", "APISimpleSuccessResponse")},
