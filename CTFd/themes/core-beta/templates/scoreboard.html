@@ -42,7 +42,11 @@
               <tr>
                 <th scope="row" class="text-center" x-text="index + 1"></th>
                 <td>
+                {% if authed() and is_admin() %}
                   <a :href="`/${CTFd.config.userMode}/${standing.account_id}`" x-text="standing.name"></a>
+                {% else %}
+                  <a :href="" x-text="standing.name"></a>
+                {% endif %}
                   <template x-if="standing.bracket_name">
                     <span class="badge bg-secondary ms-2" x-text="standing.bracket_name">
                   </template>

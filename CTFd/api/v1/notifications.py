@@ -39,6 +39,7 @@ notifications_namespace.schema_model(
 
 @notifications_namespace.route("")
 class NotificantionList(Resource):
+    @admins_only
     @notifications_namespace.doc(
         description="Endpoint to get notification objects in bulk",
         responses={
@@ -82,6 +83,7 @@ class NotificantionList(Resource):
             return {"success": False, "errors": result.errors}, 400
         return {"success": True, "data": result.data}
 
+    @admins_only
     @notifications_namespace.doc(
         description="Endpoint to get statistics for notification objects in bulk",
         responses={200: ("Success", "APISimpleSuccessResponse")},
@@ -156,6 +158,7 @@ class NotificantionList(Resource):
 @notifications_namespace.route("/<notification_id>")
 @notifications_namespace.param("notification_id", "A Notification ID")
 class Notification(Resource):
+    @admins_only
     @notifications_namespace.doc(
         description="Endpoint to get a specific notification object",
         responses={

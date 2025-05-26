@@ -21,7 +21,6 @@ scoreboard_namespace = Namespace(
 
 @scoreboard_namespace.route("")
 class ScoreboardList(Resource):
-    @check_account_visibility
     @check_score_visibility
     @cache.cached(timeout=60, key_prefix=make_cache_key)
     def get(self):
@@ -88,7 +87,6 @@ class ScoreboardList(Resource):
 @scoreboard_namespace.route("/top/<int:count>")
 @scoreboard_namespace.param("count", "How many top teams to return")
 class ScoreboardDetail(Resource):
-    @check_account_visibility
     @check_score_visibility
     @cache.cached(timeout=60, key_prefix=make_cache_key)
     def get(self, count):

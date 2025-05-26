@@ -46,7 +46,7 @@
           {% endif %}
         {% endif %}
 
-        {% if Configs.account_visibility != 'admins' and Configs.score_visibility != 'admins' %}
+        {% if Configs.score_visibility != 'admins' %}
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('scoreboard.listing') }}">
               {% trans %}Scoreboard{% endtrans %}
@@ -85,21 +85,6 @@
             </li>
           {% endif %}
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('views.notifications') }}">
-              <span
-                  class="d-block" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                  title="Notifications"
-              >
-                <i class="fas fa-bell d-none d-md-block d-lg-none"></i>
-              </span>
-              <span class="d-sm-block d-md-none d-lg-block">
-                  <i class="fas fa-bell pe-1"></i>
-                  <span x-data x-show="$store.unread_count > 0" x-text="$store.unread_count" class="badge rounded-pill bg-danger badge-notification"></span>
-                  {% trans %}Notifications{% endtrans %}
-              </span>
-            </a>
-          </li>
 
           {% if Configs.user_mode == "teams" %}
             <li class="nav-item">
