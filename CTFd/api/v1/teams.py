@@ -59,7 +59,9 @@ teams_namespace.schema_model(
 class TeamList(Resource):
     method_decorators = [require_team_mode]
 
-    @check_account_visibility
+    #  Disabled to support Scoreboard view in 'Account Visibility == 'admin'' mode --> @check_account_visibility
+    #  So 'authed_only' should work as if 'Account Visibility == 'private'
+    @authed_only
     @teams_namespace.doc(
         description="Endpoint to get Team objects in bulk",
         responses={
