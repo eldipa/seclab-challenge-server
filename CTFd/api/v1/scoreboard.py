@@ -68,7 +68,7 @@ class ScoreboardList(Resource):
         r = db.session.execute(
                 '''
                 select c.category, count(distinct c.id)
-                from challenge c
+                from challenges c
                 group by c.category
                 '''
         )
@@ -83,7 +83,7 @@ class ScoreboardList(Resource):
                 f'''
                 select s.{account_field}, c.category, count(distinct c.id)
                 from solves s
-                join challenge c
+                join challenges c
                 group by s.{account_field}, c.category
                 '''
         )
@@ -115,6 +115,9 @@ class ScoreboardList(Resource):
             stats_by_account_id[account_id] = (categories_completed, categories_almost_completed)
 
 
+        print("CHALL", challenges_by_category)
+        print("CAT", category_stats_by_account_id)
+        print("STAT", stats_by_account_id)
         for i, x in enumerate(standings):
             entry = {
                 "pos": i + 1,
