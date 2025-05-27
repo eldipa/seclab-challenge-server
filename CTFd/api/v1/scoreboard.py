@@ -73,9 +73,9 @@ class ScoreboardList(Resource):
                 '''
         )
 
-        challenges_by_category = {}
-        for category_name, challenge_count in r:
-            challenges_by_category[category_name] = int(challenge_count)
+        challenges_cnt_by_category = {}
+        for category_name, challenge_cnt in r:
+            challenges_cnt_by_category[category_name] = int(challenge_cnt)
 
         # Get the count of challenges solved by category and team/user
         account_field = 'team_id' if mode == TEAMS_MODE else 'user_id'
@@ -83,15 +83,15 @@ class ScoreboardList(Resource):
                 f'''
                 select s.{account_field}, c.category, count(distinct c.id)
                 from solves s
-                join challenges c
+                join challenges c on s.challenge_id = c.id
                 group by s.{account_field}, c.category
                 '''
         )
         del account_field
 
         category_stats_by_account_id = defaultdict(dict)
-        for account_id, category_name, challenge_count in r:
-            category_stats_by_account_id[account_id][category_name] = int(challenge_count)
+        for account_id, category_name, challenge_cnt in r:
+            category_stats_by_account_id[account_id][category_name] = int(challenge_cnt)
 
         category_stats_by_account_id = dict(category_stats_by_account_id)
 
@@ -103,9 +103,9 @@ class ScoreboardList(Resource):
         for account_id in category_stats_by_account_id.keys():
             categories_completed = 0
             categories_almost_completed = 0
-            for category_name in challenges_by_category.keys():
+            for category_name in challenges_cnt_by_category.keys():
                 solved_in_cat_cnt = category_stats_by_account_id[account_id][category_name]
-                challenge_in_cat_cnt = challenges_by_category[category_name]
+                challenge_in_cat_cnt = challenges_cnt_by_category[category_name]
 
                 if solved_in_cat_cnt == challenge_in_cat_cnt:
                     categories_completed += 1
@@ -115,7 +115,6 @@ class ScoreboardList(Resource):
             stats_by_account_id[account_id] = (categories_completed, categories_almost_completed)
 
 
-        print("CHALL", challenges_by_category)
         print("CAT", category_stats_by_account_id)
         print("STAT", stats_by_account_id)
         for i, x in enumerate(standings):
