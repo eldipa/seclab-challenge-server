@@ -109,14 +109,14 @@ class ScoreboardList(Resource):
 
                 if solved_in_cat_cnt == challenge_in_cat_cnt:
                     categories_completed += 1
-                elif solved_in_cat_cnt >= int(challenge_in_cat_cnt * Q):
+
+                if solved_in_cat_cnt >= int(challenge_in_cat_cnt * Q):
                     categories_almost_completed += 1
 
             stats_by_account_id[account_id] = (categories_completed, categories_almost_completed)
 
 
-        print("CAT", category_stats_by_account_id)
-        print("STAT", stats_by_account_id)
+        # Prepare the stats for the scoreboard
         for i, x in enumerate(standings):
             entry = {
                 "pos": i + 1,

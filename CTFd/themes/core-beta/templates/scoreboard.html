@@ -32,8 +32,11 @@
           <thead>
           <tr>
             <td style="width: 10px"><b>{% trans %}Place{% endtrans %}</b></td>
+            <td style="width: 10px"><b>Members</b></td>
             <td><b>{{ get_mode_as_word(capitalize=True) }}</b></td>
             <td><b>{% trans %}Score{% endtrans %}</b></td>
+            <td><b>Categories completed</b></td>
+            <td><b>Categories at 80%</b></td>
           </tr>
           </thead>
 
@@ -41,6 +44,7 @@
             <template x-for="(standing, index) in standings.filter(i => activeBracket ? i.bracket_id==activeBracket : true)">
               <tr>
                 <th scope="row" class="text-center" x-text="index + 1"></th>
+                <td x-text="standing.members_count"></td>
                 <td>
                 {% if authed() and is_admin() %}
                   <a :href="`/${CTFd.config.userMode}/${standing.account_id}`" x-text="standing.name"></a>
@@ -52,7 +56,6 @@
                   </template>
                 </td>
                 <td x-text="standing.score"></td>
-                <td x-text="standing.members_count"></td>
                 <td x-text="standing.categories_completed"></td>
                 <td x-text="standing.categories_almost_completed"></td>
               </tr>
