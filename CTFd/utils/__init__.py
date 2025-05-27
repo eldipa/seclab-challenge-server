@@ -106,4 +106,9 @@ def abort(*args, **kargs):
     if kargs.pop('print_stack', True):
         traceback.print_stack()
 
+    f = kargs.pop('request_fullpath', '')
+    if f:
+        f = str(f)[:50]
+        print(f"=== Abort on requesting '{f}'")
+
     _flask_abort(*args, **kargs)

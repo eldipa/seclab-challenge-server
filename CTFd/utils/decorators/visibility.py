@@ -107,7 +107,7 @@ def check_account_visibility(f):
             if is_admin():
                 return f(*args, **kwargs)
             else:
-                abort(404)
+                abort(404, request_fullpath=request.full_path)
 
     return _check_account_visibility
 
