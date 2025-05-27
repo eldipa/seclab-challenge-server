@@ -64,6 +64,57 @@ class ScoreboardList(Resource):
             for u in user_standings:
                 membership[u.team_id][u.user_id]["score"] = int(u.score)
 
+        # Get the count of challenges by category
+        r = db.session.execute(
+                '''
+                select c.category, count(distinct c.id)
+                from challenge c
+                group by c.category
+                '''
+        )
+
+        challenges_by_category = {}
+        for category_name, challenge_count in r:
+            challenges_by_category[category_name] = int(challenge_count)
+
+        # Get the count of challenges solved by category and team/user
+        account_field = 'team_id' if mode == TEAMS_MODE else 'user_id'
+        r = db.session.execute(
+                f'''
+                select s.{account_field}, c.category, count(distinct c.id)
+                from solves s
+                join challenge c
+                group by s.{account_field}, c.category
+                '''
+        )
+        del account_field
+
+        category_stats_by_account_id = defaultdict(dict)
+        for account_id, category_name, challenge_count in r:
+            category_stats_by_account_id[account_id][category_name] = int(challenge_count)
+
+        category_stats_by_account_id = dict(category_stats_by_account_id)
+
+        # Compute how many categories were fully completed and how many were "almost"
+        # fully completed where "almost" means >= than a certain percentage (80%)
+        Q = 0.8
+
+        stats_by_account_id = {}
+        for account_id in category_stats_by_account_id.keys():
+            categories_completed = 0
+            categories_almost_completed = 0
+            for category_name in challenges_by_category.keys():
+                solved_in_cat_cnt = category_stats_by_account_id[account_id][category_name]
+                challenge_in_cat_cnt = challenges_by_category[category_name]
+
+                if solved_in_cat_cnt == challenge_in_cat_cnt:
+                    categories_completed += 1
+                elif solved_in_cat_cnt >= int(challenge_in_cat_cnt * Q):
+                    categories_almost_completed += 1
+
+            stats_by_account_id[account_id] = (categories_completed, categories_almost_completed)
+
+
         for i, x in enumerate(standings):
             entry = {
                 "pos": i + 1,
@@ -75,12 +126,16 @@ class ScoreboardList(Resource):
                 "score": int(x.score),
                 "bracket_id": x.bracket_id,
                 "bracket_name": x.bracket_name,
+                "categories_completed": stats_by_account_id[x.account_id][0],
+                "categories_almost_completed": stats_by_account_id[x.account_id][1],
             }
 
             if mode == TEAMS_MODE:
                 entry["members"] = list(membership[x.account_id].values())
+                entry["members_count"] = len(entry["members"])
 
             response.append(entry)
+
         return {"success": True, "data": response}
 
 
