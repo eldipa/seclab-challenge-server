@@ -104,7 +104,7 @@ class ScoreboardList(Resource):
             categories_completed = 0
             categories_almost_completed = 0
             for category_name in challenges_cnt_by_category.keys():
-                solved_in_cat_cnt = category_stats_by_account_id[account_id][category_name]
+                solved_in_cat_cnt = category_stats_by_account_id[account_id].get(category_name, 0)
                 challenge_in_cat_cnt = challenges_cnt_by_category[category_name]
 
                 if solved_in_cat_cnt == challenge_in_cat_cnt:
