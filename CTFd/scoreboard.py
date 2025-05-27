@@ -13,8 +13,9 @@ from CTFd.utils.user import is_admin
 scoreboard = Blueprint("scoreboard", __name__)
 
 
+# We disable this --> @check_account_visibility
+# so we can call this view even if Account Visibility is set to 'admin'
 @scoreboard.route("/scoreboard")
-@check_account_visibility
 @check_score_visibility
 def listing():
     infos = get_infos()

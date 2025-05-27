@@ -371,9 +371,8 @@ def private():
     )
 
 
-# We disable this --> @check_account_visibility
-# so we can call this view even if Account Visibility is set to 'admin'
 @teams.route("/teams/<int:team_id>")
+@check_account_visibility
 @check_score_visibility
 @require_team_mode
 def public(team_id):
